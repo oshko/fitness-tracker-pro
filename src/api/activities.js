@@ -22,6 +22,17 @@ export async function getActivity(id) {
     return null;
   }
 }
+
+export async function getRoutines() {
+  try {
+    const response = await fetch(API +'/routines');
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (error) {
+    console.error(error)
+  }
+}
 /**
  * Sends a new activity to the API to be created.
  * A valid token is required.
@@ -43,6 +54,28 @@ export async function createActivity(token, activity) {
   if (!response.ok) {
     const result = await response.json();
     throw Error(result.message);
+  }
+}
+
+export async function createRoutine(token, userInput) {
+  try {
+    if(!token) {
+      throw Error("You need to sign in to create Routine!")
+    }
+    const response = await fetch(API + "/routines", {
+      method: "POST",
+      headers: {"Content-Type":"application/json",
+      Authorization: "Bearer " + token,},
+      body: JSON.stringify(userInput)
+    });
+
+    if(!response.ok) {
+      const result = await response.json();
+      throw Error(result.message);
+    }
+  
+  } catch (error) {
+    console.error(error)
   }
 }
 
